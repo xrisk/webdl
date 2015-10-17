@@ -118,7 +118,7 @@ class DownloadHandler(tornado.web.RequestHandler):
 
 def make_app():
     return tornado.web.Application([
-        (r"^/download.*$", DownloadHandler),
+        (r"^/download\.mp3.*$", DownloadHandler),
         (r"/.*", MainHandler),
     ])
 
