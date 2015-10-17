@@ -1,4 +1,2 @@
-https://github.com/heroku/heroku-buildpack-python
-https://github.com/xrisk/heroku-buildpack-lame
-https://github.com/xrisk/heroku-buildpack-ffmpeg
-
+https://github.com/heroku/heroku-buildpack-python/
+https://github.com/xrisk/ffmpeg-lame-yasm/
