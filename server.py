@@ -1,11 +1,22 @@
-import BaseHTTPServer
+import tornado.ioloop
+import tornado.web
 import gzip
 import logging
 import os
-import random
 import sha
-import sys
-import urlparse
+
+hash_lookup = {}
+
+mimetable = {
+    ".css": "text/css",
+    ".eot": "application/octet-stream",
+    ".html": "text/html",
+    ".png": "image/png",
+    ".svg": "image/svg+xml",
+    ".ttf": "application/x-font-ttf",
+    ".woff": "application/octet-stream",
+    ".woff2": "application/octet-stream",
+}
 
 
 def sha_hash(content):
@@ -33,8 +44,8 @@ def gzip_content(content):
 
 
 def has_gzip(self):
-    if 'Accept-Encoding' in self.headers:
-        if 'gzip' in self.headers['Accept-Encoding']:
+    if 'Accept-Encoding' in self.request.headers:
+        if 'gzip' in self.request.headers['Accept-Encoding']:
             return True
     else:
         return False
@@ -42,51 +53,29 @@ def has_gzip(self):
 
 def smart_reply(self, resp):
     if self.has_gzip():
-        self.send_header('Content-Encoding', 'gzip')
-        self.end_headers()
-        self.wfile.write(gzip_content(resp))
+        self.set_header('Content-Encoding', 'gzip')
+        self.write(gzip_content(resp))
     else:
-        self.end_headers()
-        self.wfile.write(resp)
+        self.write(resp)
 
-# let's be a nice compliant server
-mimetable = {
-    ".css": "text/css",
-    ".eot": "application/octet-stream",
-    ".html": "text/html",
-    ".png": "image/png",
-    ".svg": "image/svg+xml",
-    ".ttf": "application/x-font-ttf",
-    ".woff": "application/octet-stream",
-    ".woff2": "application/octet-stream",
-}
 
-hash_lookup = {}
-
-class Handler(BaseHTTPServer.BaseHTTPRequestHandler):
-    def do_GET(self):
-        if '--force-ssl' in sys.argv:
-            if self.headers['X-Forwarded-Proto'] != 'https':
-                self.send_response(301, 'Must use SSL')
-                self.send_header(
-                        'Location', 'https://icse.herokuapp.com' + self.path)
-                self.end_headers()
-                return
-
-        if self.path == '/':
+class MainHandler(tornado.web.RequestHandler):
+    def get(self):
+        if self.request.path == '/':
             path = os.path.join('web', 'index.html')
         else:
-            if self.path.startswith('/'):
-                path = os.path.join('web', self.path[1:])
+            if self.request.path.startswith('/'):
+                path = os.path.join('web', self.request.path[1:])
             else:
-                path = os.path.join('web', self.path)
+                path = os.path.join('web', self.request.path)
 
         if not os.path.isfile(path):
-            self.send_response(404)
-            self.send_header('Content-Type', 'text/html')
+            self.set_status(404, 'Not Found')
+            self.set_header('Content-Type', 'text/html')
             with open('web/404-generic.html') as fin:
                 resp = fin.read()
-            self.write(resp)
+            self.smart_write(resp)
+            self.finish()
             return
 
         with open(path) as fin:
@@ -98,28 +87,31 @@ class Handler(BaseHTTPServer.BaseHTTPRequestHandler):
             h = sha_hash(resp)
             hash_lookup[path] = h
 
-        if 'If-None-Match' in self.headers:
-            if h == self.headers['If-None-Match']:
-                self.send_response(304, "Unchanged")
-                self.send_header("Cache-Control", "no-cache, max-age=604800")
-                self.send_header("ETag", h)
-                self.end_headers()
+        if 'If-None-Match' in self.request.headers:
+            if h == self.request.headers['If-None-Match']:
+                self.set_status(304, "Unchanged")
+                self.set_header("Cache-Control", "no-cache, max-age=604800")
+                self.set_header("ETag", h)
+                self.finish()
                 return
 
-        self.send_response(200, 'OK')
-        self.send_header("Cache-Control", "no-cache, max-age=604800")
-        self.send_header("Content-type", mime(path))
-        self.send_header("ETag", h)
-        self.write(resp)
+        self.set_status(200, 'OK')
+        self.set_header("Cache-Control", "no-cache, max-age=604800")
+        self.set_header("Content-type", mime(path))
+        self.set_header("ETag", h)
+        self.smart_write(resp)
+        self.finish()
 
-Handler.has_gzip = has_gzip
-Handler.write = smart_reply
+MainHandler.smart_write = smart_reply
+MainHandler.has_gzip = has_gzip
 
-if 'PORT' in os.environ:
-    PORT = int(os.environ['PORT'])
-else:
-    PORT = random.choice(range(5000, 10000))
 
-httpd = BaseHTTPServer.HTTPServer(('', PORT), Handler)
-print "serving at port", PORT
-httpd.serve_forever()
+def make_app():
+    return tornado.web.Application([
+        (r"/.*", MainHandler),
+    ])
+
+
+app = make_app()
+app.listen(os.environ['PORT'])
+tornado.ioloop.IOLoop.current().start()
