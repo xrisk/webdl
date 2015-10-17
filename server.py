@@ -107,7 +107,7 @@ class MainHandler(tornado.web.RequestHandler):
 class DownloadHandler(tornado.web.RequestHandler):
     def get(self):
         self.set_status(200, 'OK')
-        self.set_header('Content-Type', 'audio/mpeg')
+        self.set_header('Content-Type', 'application/octet-stream')
         link = self.get_argument('link')
         if not os.path.exists(sha_hash(link)):
             downloader.download(link)
