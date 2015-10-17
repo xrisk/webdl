@@ -104,29 +104,46 @@ class MainHandler(tornado.web.RequestHandler):
         self.finish()
 
 
-class DownloadHandler(tornado.web.RequestHandler):
+class AudioHandler(tornado.web.RequestHandler):
     def get(self):
         self.set_status(200, 'OK')
         self.set_header('Content-Type', 'application/octet-stream')
         link = self.get_argument('link')
-        if not os.path.exists(sha_hash(link)):
-            downloader.download(link)
-        with open(sha_hash(link), 'rb') as fin:
+        path = os.path.join('/app/mp3cache/', sha_hash(link))
+        if not os.path.exists(path):
+            downloader.download_audio(link)
+        with open(path, 'rb') as fin:
+            self.smart_write(fin.read())
+        self.finish()
+
+
+class VideoHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.set_status(200, 'OK')
+        self.set_header('Content-Type', 'application/octet-stream')
+        link = self.get_argument('link')
+        path = os.path.join('/app/mp4cache/', sha_hash(link))
+        if not os.path.exists(path):
+            downloader.download_video(link)
+        with open(sha_hash(path), 'rb') as fin:
             self.smart_write(fin.read())
         self.finish()
 
 
 def make_app():
     return tornado.web.Application([
-        (r"^/download\.mp3.*$", DownloadHandler),
+        (r"^/download\.mp3.*$", AudioHandler),
+        (r"^/download\.mp4.*$", VideoHandler)
         (r"/.*", MainHandler),
     ])
 
 
 MainHandler.smart_write = smart_reply
 MainHandler.has_gzip = has_gzip
-DownloadHandler.smart_write = smart_reply
-DownloadHandler.has_gzip = has_gzip
+AudioHandler.smart_write = smart_reply
+AudioHandler.has_gzip = has_gzip
+VideoHandler.smart_write = smart_reply
+VideoHandler.has_gzip = has_gzip
 
 app = make_app()
 app.listen(os.environ['PORT'])

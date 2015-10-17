@@ -7,7 +7,6 @@
         <meta name="author" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="css/big.css">
-        <link rel="icon" type="image/png" href="images/favicon.png">
     </head>
 
     <body>
@@ -22,17 +21,29 @@
                 <div class="row">
                         <div class="six columns" style="margin: auto">
                             <label for="exampleEmailInput"></label>
-                            <input class="u-full-width" type="text" placeholder="YouTube link goes here." name="link">
+                            <input class="u-full-width" type="text" placeholder="YouTube link goes here." name="link" required="true">
                         </div>
                   
                 </div>
 
                 <div class="row">
-                    <div class="twelve columns">
-                        <button type="submit" class="button-primary" id="submit">Download</button>
+                    <div class="six columns" style="margin: auto;">
+                        <button type="submit" class="button-primary" name="choice" value="mp3" onclick="mutate(this.value);">Download Audio</button>
+                        <button type="submit" class="button-primary" name="choice" value="mp4" onclick="mutate(this.value);">Download Video</button>
                     </div>
                 </div>
             </form>
         </div>
+
+        <script>
+        function mutate(e){
+            console.log("mutate invoked with argument " + e);
+            if(e==="mp3")
+                document.forms[0].action="/download.mp3";
+            else if(e==="mp4")
+                document.forms[0].action="/download.mp4"
+        }
+        </script>
+        
     </body>
 </html>
