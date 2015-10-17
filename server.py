@@ -2,12 +2,10 @@ import BaseHTTPServer
 import gzip
 import logging
 import os
-import pymongo
 import random
 import sha
 import sys
 import urlparse
-from bs4 import BeautifulSoup as bs
 
 
 def sha_hash(content):
