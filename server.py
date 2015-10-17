@@ -110,7 +110,7 @@ class DownloadHandler(tornado.web.RequestHandler):
         self.set_header('Content-Type', 'audio/mpeg')
         link = self.get_argument('link')
         if not os.path.exists(sha_hash(link)):
-            downloader.download(link), 'rb')
+            downloader.download((link), 'rb')
         with open(sha_hash(link), 'rb') as fin:
             self.smart_write(fin.read())
         self.finish()
