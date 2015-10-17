@@ -298,6 +298,21 @@ button:hover
 input[type="text"]
 {
   margin-left: 50%;
+  color: black;
+}
+.bottom
+{
+text-align: center;
+font-size: 10px;
+}
+a
+{
+  color: white;
+}
+
+a:hover
+{
+  color: white;
 }
 
 
