@@ -275,7 +275,12 @@ html, body
 {
   background-color: #0289FF;
   color: white;
-  font-family: 'Avenir Next';
+  font-family: 'Avenir Next', 'HelveticaNeue-Light', 'Roboto', sans-serif;
+  height: 100%;
+}
+body
+{
+  display: flex;
 }
 button.button-primary
 {
@@ -292,13 +297,12 @@ button:hover
 .container
 {
   text-align: center;
-  margin-top: 20%;
+  margin: auto;
 
 }
 
 input[type="text"]
 {
-  margin-left: 50%;
   color: black;
 }
 .bottom
@@ -316,5 +320,9 @@ a:hover
   color: white;
 }
 
+.lolz .row
+{
+  display: flex;
+}
 
 
