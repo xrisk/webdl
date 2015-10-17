@@ -105,7 +105,7 @@ class MainHandler(tornado.web.RequestHandler):
 
 
 class DownloadHandler(tornado.web.RequestHandler):
-    def post(self):
+    def get(self):
         self.set_status(200, 'OK')
         link = self.get_argument('link')
         self.smart_write(downloader.download(link))
@@ -114,7 +114,7 @@ class DownloadHandler(tornado.web.RequestHandler):
 
 def make_app():
     return tornado.web.Application([
-        (r"/download", DownloadHandler),
+        (r"^/download.*$", DownloadHandler),
         (r"/.*", MainHandler),
     ])
 
