@@ -133,7 +133,7 @@ class VideoHandler(tornado.web.RequestHandler):
 def make_app():
     return tornado.web.Application([
         (r"^/download\.mp3.*$", AudioHandler),
-        (r"^/download\.mp4.*$", VideoHandler)
+        (r"^/download\.mp4.*$", VideoHandler),
         (r"/.*", MainHandler),
     ])
 

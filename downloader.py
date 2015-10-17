@@ -26,7 +26,7 @@ def download_video(url):
     from subprocess import call
     retcode = call(["youtube-dl", "--format", "mp4",
                     "--exec",
-                    "mv {}" + os.path.join('/app/mp4cache/', sha_hash(url)),
+                    "mv {} " + os.path.join('/app/mp4cache/', sha_hash(url)),
                     url])
 
     if retcode == 0:
