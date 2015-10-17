@@ -18,20 +18,21 @@
                 </div>
             </div>
 
-            <form class = "lolz">
+            <form action="/download" method="POST">
                 <div class="row">
                         <div class="six columns" style="margin: auto">
                             <label for="exampleEmailInput"></label>
-                            <input class="u-full-width" type="text" placeholder="YouTube link goes here." id="exampleEmailInput">
+                            <input class="u-full-width" type="text" placeholder="YouTube link goes here." name="link">
                         </div>
                   
                 </div>
+
+                <div class="row">
+                    <div class="twelve columns">
+                        <input type="submit" class="button-primary" id="submit">
+                    </div>
+                </div>
             </form>
-            <div class="row">
-                <center>
-                    <button class="button-primary">Search</button>
-                </center>
-            </div>
         </div>
     </body>
 </html>

@@ -2,6 +2,7 @@ import tornado.ioloop
 import tornado.web
 import gzip
 import logging
+import downloader
 import os
 import sha
 
@@ -102,15 +103,28 @@ class MainHandler(tornado.web.RequestHandler):
         self.smart_write(resp)
         self.finish()
 
-MainHandler.smart_write = smart_reply
-MainHandler.has_gzip = has_gzip
 
+
+class DownloadHandler(tornado.web.RequestHandler):
+    def post(self):
+        self.set_status(200, 'OK')
+        link = self.get_argument('link')
+        downloader.download(link, link + '.mp3')
+        with open(link) as fin:
+            self.smart_write(fin.read())
+        self.finish()
 
 def make_app():
     return tornado.web.Application([
+        (r"/download", DownloadHandler),
         (r"/.*", MainHandler),
     ])
 
+
+MainHandler.smart_write = smart_reply
+MainHandler.has_gzip = has_gzip
+DownloadHandler.smart_write = smart_reply
+DownloadHandler.has_gzip = has_gzip
 
 app = make_app()
 app.listen(os.environ['PORT'])

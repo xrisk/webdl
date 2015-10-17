@@ -282,13 +282,13 @@ body
 {
   display: flex;
 }
-button.button-primary
+#submit
 {
   background-color: #f24e06;
   border-color: #f24e06; 
   transition: all 0.6s;
 }
-button:hover
+#submit:hover
 {
   background-color: #1EAEDB;
   border-color: #1EAEDB;
@@ -320,7 +320,7 @@ a:hover
   color: white;
 }
 
-.lolz .row
+form .row
 {
   display: flex;
 }
