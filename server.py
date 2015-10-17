@@ -125,7 +125,7 @@ class VideoHandler(tornado.web.RequestHandler):
         path = os.path.join('/app/mp4cache/', sha_hash(link))
         if not os.path.exists(path):
             downloader.download_video(link)
-        with open(sha_hash(path), 'rb') as fin:
+        with open(path, 'rb') as fin:
             self.smart_write(fin.read())
         self.finish()
 
