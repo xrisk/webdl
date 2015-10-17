@@ -287,6 +287,7 @@ button:hover
 {
   background-color: #1EAEDB;
   border-color: #1EAEDB;
+  box-shadow: 3px 3px #f24e06; 
 }
 .container
 {
