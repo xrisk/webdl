@@ -104,15 +104,13 @@ class MainHandler(tornado.web.RequestHandler):
         self.finish()
 
 
-
 class DownloadHandler(tornado.web.RequestHandler):
     def post(self):
         self.set_status(200, 'OK')
         link = self.get_argument('link')
-        downloader.download(link, link)
-        with open(link) as fin:
-            self.smart_write(fin.read())
+        self.smart_write(downloader.download(link))
         self.finish()
+
 
 def make_app():
     return tornado.web.Application([
