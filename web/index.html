@@ -18,18 +18,18 @@
                 </div>
             </div>
 
-            <form action="/download.mp3" method="GET">
+            <form action="http://webdl.herokuapp.com/download" method="GET">
                 <div class="row">
                         <div class="six columns" style="margin: auto">
                             <label for="exampleEmailInput"></label>
-                            <input class="u-full-width" type="text" placeholder="YouTube link goes here." name="link" >
+                            <input class="u-full-width" type="text" placeholder="YouTube link goes here." name="link">
                         </div>
                   
                 </div>
 
                 <div class="row">
                     <div class="twelve columns">
-                        <input type="submit" class="button-primary" id="submit">
+                        <button type="submit" class="button-primary" id="submit">Download</button>
                     </div>
                 </div>
             </form>

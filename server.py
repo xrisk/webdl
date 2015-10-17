@@ -107,8 +107,10 @@ class MainHandler(tornado.web.RequestHandler):
 class DownloadHandler(tornado.web.RequestHandler):
     def get(self):
         self.set_status(200, 'OK')
+        self.set_header('Content-Type', 'audio/mpeg')
         link = self.get_argument('link')
-        self.smart_write(downloader.download(link))
+        with open(downloader.download(link), 'rb') as fin:
+            self.smart_write(fin.read())
         self.finish()
 
 
