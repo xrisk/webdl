@@ -1,0 +1,279 @@
+/*** uncss> filename: css/big.css ***/
+
+html {
+  font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+a {
+  background-color: transparent;
+}
+
+a:active,
+a:hover {
+  outline: 0;
+}
+
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+button,
+input {
+  color: inherit;
+  font: inherit;
+  margin: 0;
+}
+
+button {
+  overflow: visible;
+}
+
+button {
+  text-transform: none;
+}
+
+button {
+  -webkit-appearance: button;
+  cursor: pointer;
+}
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+input {
+  line-height: normal;
+}
+
+/*===============================================================================================================*/
+
+.container {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.columns {
+  width: 100%;
+  float: left;
+  box-sizing: border-box;
+}
+
+@media (min-width:400px) {
+  .container {
+    width: 85%;
+    padding: 0;
+  }
+}
+
+@media (min-width:550px) {
+  .container {
+    width: 80%;
+  }
+
+  .columns {
+    margin-left: 4%;
+  }
+
+  .columns:first-child {
+    margin-left: 0;
+  }
+
+  .six.columns {
+    width: 48%;
+  }
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.5em;
+  line-height: 1.6;
+  font-weight: 400;
+  font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #222;
+}
+
+h1 {
+  margin-top: 0;
+  margin-bottom: 2rem;
+  font-weight: 300;
+}
+
+h1 {
+  font-size: 4.0rem;
+  line-height: 1.2;
+  letter-spacing: -.1rem;
+}
+
+@media (min-width:550px) {
+  h1 {
+    font-size: 5.0rem;
+  }
+}
+
+a {
+  color: #1EAEDB;
+}
+
+a:hover {
+  color: #0FA0CE;
+}
+
+button {
+  display: inline-block;
+  height: 38px;
+  padding: 0 30px;
+  color: #555;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 38px;
+  letter-spacing: .1rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: transparent;
+  border-radius: 4px;
+  border: 1px solid #bbb;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+button:hover,
+button:focus {
+  color: #333;
+  border-color: #888;
+  outline: 0;
+}
+
+button.button-primary {
+  color: #FFF;
+  background-color: #33C3F0;
+  border-color: #33C3F0;
+}
+
+button.button-primary:hover,
+button.button-primary:focus {
+  color: #FFF;
+  background-color: #1EAEDB;
+  border-color: #1EAEDB;
+}
+
+input[type="text"] {
+  height: 38px;
+  padding: 6px 10px;
+  background-color: #fff;
+  border: 1px solid #D1D1D1;
+  border-radius: 4px;
+  box-shadow: none;
+  box-sizing: border-box;
+}
+
+input[type="text"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+input[type="text"]:focus {
+  border: 1px solid #33C3F0;
+  outline: 0;
+}
+
+label {
+  display: block;
+  margin-bottom: .5rem;
+  font-weight: 600;
+}
+
+button {
+  margin-bottom: 1rem;
+}
+
+input {
+  margin-bottom: 1.5rem;
+}
+
+form {
+  margin-bottom: 2.5rem;
+}
+
+.u-full-width {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.container:after,
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/*===============================================================================================================*/
+
+@font-face {
+  font-family: 'SanFrancisco';
+  src: url('../fonts/sf-webfont.eot');
+  src: url('../fonts/sf-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/sf-webfont.woff2') format('woff2'),
+         url('../fonts/sf-webfont.woff') format('woff'),
+         url('../fonts/sf-webfont.ttf') format('truetype'),
+         url('../fonts/sf-webfont.svg#san_francisco_displayregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+html,
+body {
+  background-color: #0289FF;
+  color: white;
+  font-family: 'Avenir Next', 'HelveticaNeue-Light', 'Roboto', sans-serif;
+  height: 100%;
+}
+
+body,
+.row {
+  display: flex;
+}
+
+button.button-primary {
+  background-color: #f24e06;
+  border-color: #f24e06;
+  transition: all 0.6s;
+}
+
+.container {
+  text-align: center;
+  margin: auto;
+}
+
+input[type="text"] {
+  color: black;
+}
+
+.bottom {
+  text-align: center;
+  font-size: 10px;
+}
+
+a,
+a:hover {
+  color: white;
+}
+
