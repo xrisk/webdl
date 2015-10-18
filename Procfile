@@ -1,1 +1,1 @@
-web: python -u server.py --no-compress
+web: python -u server.py
