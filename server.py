@@ -58,8 +58,8 @@ def smart_reply(self, resp):
         if '--no-compress' not in sys.argv:
             self.set_header('Content-Encoding', 'gzip')
             self.write(gzip_content(resp))
-    else:
-        self.write(resp)
+            return
+    self.write(resp)
 
 
 class MainHandler(tornado.web.RequestHandler):
