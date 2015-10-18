@@ -109,7 +109,7 @@ class MainHandler(tornado.web.RequestHandler):
 class AudioHandler(tornado.web.RequestHandler):
     def get(self):
         link = self.get_argument('link')
-        path = os.path.join('/app/mp3cache/', sha_hash(link))
+        path = os.path.join('mp3cache/', sha_hash(link))
         if not os.path.exists(path):
             try:
                 downloader.download_audio(link)
@@ -131,7 +131,7 @@ class AudioHandler(tornado.web.RequestHandler):
 class VideoHandler(tornado.web.RequestHandler):
     def get(self):
         link = self.get_argument('link')
-        path = os.path.join('/app/mp4cache/', sha_hash(link))
+        path = os.path.join('mp4cache/', sha_hash(link))
         if not os.path.exists(path):
             try:
                 downloader.download_video(link)
