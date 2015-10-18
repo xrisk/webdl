@@ -106,12 +106,21 @@ class MainHandler(tornado.web.RequestHandler):
 
 class AudioHandler(tornado.web.RequestHandler):
     def get(self):
-        self.set_status(200, 'OK')
-        self.set_header('Content-Type', 'application/octet-stream')
         link = self.get_argument('link')
         path = os.path.join('/app/mp3cache/', sha_hash(link))
         if not os.path.exists(path):
-            downloader.download_audio(link)
+            try:
+                downloader.download_audio(link)
+            except Exception:
+                self.set_status(404, 'Not Found')
+                self.set_header('Content-Type', 'text/html')
+                with open('web/404-video.html') as fin:
+                    self.smart_write(fin.read())
+                self.finish()
+                return
+
+        self.set_status(200, 'OK')
+        self.set_header('Content-Type', 'application/octet-stream')
         with open(path, 'rb') as fin:
             self.smart_write(fin.read())
         self.finish()
@@ -119,12 +128,21 @@ class AudioHandler(tornado.web.RequestHandler):
 
 class VideoHandler(tornado.web.RequestHandler):
     def get(self):
-        self.set_status(200, 'OK')
-        self.set_header('Content-Type', 'application/octet-stream')
         link = self.get_argument('link')
         path = os.path.join('/app/mp4cache/', sha_hash(link))
         if not os.path.exists(path):
-            downloader.download_video(link)
+            try:
+                downloader.download_video(link)
+            except Exception:
+                self.set_status(404, 'Not Found')
+                self.set_header('Content-Type', 'text/html')
+                with open('web/404-video.html') as fin:
+                    self.smart_write(fin.read())
+                self.finish()
+                return
+
+        self.set_status(200, 'OK')
+        self.set_header('Content-Type', 'application/octet-stream')
         with open(path, 'rb') as fin:
             self.smart_write(fin.read())
         self.finish()

@@ -13,15 +13,15 @@
         <div class="container">
             <div class="row">
                 <div class="u-full-width">
-                    <h1 class = "lol">Downloader </h1>
+                    <h1 class = "lol">YouTube Downloader </h1>
                 </div>
             </div>
 
-            <form action="download.mp3" method="GET">
+            <form action="download.mp3" method="GET" onsubmit="if(!validate()) { event.preventDefault(); }">
                 <div class="row">
                         <div class="six columns" style="margin: auto">
                             <label for="exampleEmailInput"></label>
-                            <input class="u-full-width" type="text" placeholder="YouTube link goes here." name="link" required="true">
+                            <input class="u-full-width" type="text" placeholder="YouTube link goes here." name="link">
                         </div>
                   
                 </div>
@@ -33,9 +33,31 @@
                     </div>
                 </div>
             </form>
+
+            <div class="row bottom">
+                <div class="u-full-width">
+                    Made with &#10084; by <a link href="https://xrisk.github.io" style="color:inherit">xrisk</a> and <a href="https://github.com/rudradevroy" style="color:inherit">rudradevroy</a> &bull; <a href="https://github.com/xrisk/webdl">Github</a>
+                </div>
         </div>
 
+        </div>
+
+
+
         <script>
+        function validate(){
+            console.log("validate was invoked");
+            var elem = document.querySelector('input[name="link"]');
+            if(elem.value===""){
+                console.log("Returning falseness.")
+                elem.placeholder = "Link may not be empty."
+                return false;
+            }
+            else{
+                console.log("Returning trueness.");
+                return true;
+            }
+        }
         function mutate(e){
             console.log("mutate invoked with argument " + e);
             if(e==="mp3")
