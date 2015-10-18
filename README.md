@@ -9,7 +9,7 @@
 
 ##### How it works
 
-webdl core downloader uses ffmpeg and youtube to do all the hard work. The server is written in asynchronous Tornado, and uses state-of-the-art techniques like compression and caching. This _is_ speed pushed to it's limits.
+The webdl downloader uses ffmpeg and youtube to do all the hard work. The server is written in asynchronous Tornado, and uses state-of-the-art techniques like compression and caching. This _is_ speed pushed to its limits.
 
 ##### Dependencies
 
@@ -41,3 +41,6 @@ python -u server.py
 
 Then navigate to http://localhost:5000 to see it in action.
 
+##### License
+
+Distributed under the MIT license.
