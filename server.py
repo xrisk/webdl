@@ -4,6 +4,7 @@ import gzip
 import logging
 import downloader
 import os
+import sys
 import sha
 
 hash_lookup = {}
@@ -54,8 +55,9 @@ def has_gzip(self):
 
 def smart_reply(self, resp):
     if self.has_gzip():
-        self.set_header('Content-Encoding', 'gzip')
-        self.write(gzip_content(resp))
+        if '--no-compress' not in sys.argv:
+            self.set_header('Content-Encoding', 'gzip')
+            self.write(gzip_content(resp))
     else:
         self.write(resp)
 
