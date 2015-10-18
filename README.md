@@ -3,6 +3,8 @@
 > A _light, libre and oh-so-fast_ downloader for YouTube.
 > In all of 2,596 bytes. 
 
+![Screenshot of webdl](https://i.imgur.com/K7K4rz0.png)
+
 ===========
 
 ##### How it works
