@@ -10,7 +10,7 @@ def download_audio(url):
     from subprocess import call
 
     retcode = call(["youtube-dl", "-x", "--id",
-                    "--audio-quality", "0",
+                    "--audio-quality", "9",
                     "--audio-format", "mp3",
                     "--exec",
                     "mv {} " + os.path.join('/app/mp3cache/', sha_hash(url)),
