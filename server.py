@@ -5,7 +5,7 @@ import logging
 import downloader
 import os
 import sys
-import sha
+import hashlib
 
 hash_lookup = {}
 
@@ -22,7 +22,7 @@ mimetable = {
 
 
 def sha_hash(content):
-    return sha.new(content).hexdigest()
+    return hashlib.new('sha1').update(content).hexdigest()
 
 
 def mime(path):
