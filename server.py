@@ -22,7 +22,11 @@ mimetable = {
 
 
 def sha_hash(content):
-    return hashlib.new('sha1').update(content).hexdigest()
+    if type(content) == str:
+        content = content.encode('utf-8')
+    m = hashlib.sha256()
+    m.update(content)
+    return m.hexdigest()
 
 
 def mime(path):

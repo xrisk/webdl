@@ -1,10 +1,13 @@
-import sha
 import os
+import hashlib
 
 
 def sha_hash(content):
-    return sha.new(content).hexdigest()
-
+    if type(content) == str:
+        content = content.encode('utf-8')
+    m = hashlib.sha256()
+    m.update(content)
+    return m.hexdigest()
 
 def download_audio(url):
     from subprocess import call
