@@ -43,6 +43,8 @@ def gzip_content(content):
         with open(h, 'rb') as fin:
             return fin.read()
     with gzip.open(h, 'wb') as fout:
+        if type(content) == str:
+            content = content.encode('utf-8')
         fout.write(content)
     fout.close()
     with open(h, 'rb') as fin:
