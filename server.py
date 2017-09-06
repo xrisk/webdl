@@ -87,7 +87,7 @@ class MainHandler(tornado.web.RequestHandler):
             self.finish()
             return
 
-        with open(path) as fin:
+        with open(path, 'rb') as fin:
             resp = fin.read()
 
         if path in hash_lookup:
