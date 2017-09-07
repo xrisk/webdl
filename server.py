@@ -1,170 +1,32 @@
-import tornado.ioloop
-import tornado.web
-import gzip
-import logging
-import downloader
-import os
-import sys
-import sha
+from flask import Flask
 
-hash_lookup = {}
+from flask import request, jsonify, abort
+from downloader import YoutubeDownloader
 
-mimetable = {
-    ".css": "text/css",
-    ".eot": "application/octet-stream",
-    ".html": "text/html",
-    ".png": "image/png",
-    ".svg": "image/svg+xml",
-    ".ttf": "application/x-font-ttf",
-    ".woff": "application/octet-stream",
-    ".woff2": "application/octet-stream",
-}
+app = Flask(__name__)
+yt = YoutubeDownloader('cache')
 
 
-def sha_hash(content):
-    return sha.new(content).hexdigest()
+@app.route('/download/<req_type>', methods=['POST'])
+def handle_download_request(req_type):
+    if 'url' not in request.form:
+        abort(400)
+    if req_type != "mp3" and req_type != "mp4":
+        abort(400)
+    try:
+        a = True if req_type == "mp3" else False
+        req_id = yt.start_download(request.form['url'], audio_only=a)
+        return jsonify({'req_id': req_id})
+    except Exception as e:
+        print(e)
+        return jsonify({'status': 'error'})
 
 
-def mime(path):
-    for i in mimetable:
-        if path.endswith(i):
-            return mimetable[i]
-    logging.warn('Mime type not found for' + path)
-    return 'text/plain'
+@app.route('/status/<int:req_id>', methods=['GET'])
+def handle_status_request(req_id):
+    status = yt.get_status(req_id)
+    return jsonify(status)
 
 
-def gzip_content(content):
-    h = sha_hash(content) + '.gzip'
-    if os.path.isfile(h):
-        with open(h, 'rb') as fin:
-            return fin.read()
-    with gzip.open(h, 'wb') as fout:
-        fout.write(content)
-    fout.close()
-    with open(h, 'rb') as fin:
-        return fin.read()
-
-
-def has_gzip(self):
-    if 'Accept-Encoding' in self.request.headers:
-        if 'gzip' in self.request.headers['Accept-Encoding']:
-            return True
-    else:
-        return False
-
-
-def smart_reply(self, resp):
-    if self.has_gzip():
-        if '--no-compress' not in sys.argv:
-            self.set_header('Content-Encoding', 'gzip')
-            self.write(gzip_content(resp))
-            return
-    self.write(resp)
-
-
-class MainHandler(tornado.web.RequestHandler):
-    def get(self):
-        if self.request.path == '/':
-            path = os.path.join('web', 'index.html')
-        else:
-            if self.request.path.startswith('/'):
-                path = os.path.join('web', self.request.path[1:])
-            else:
-                path = os.path.join('web', self.request.path)
-
-        if not os.path.isfile(path):
-            self.set_status(404, 'Not Found')
-            self.set_header('Content-Type', 'text/html')
-            with open('web/404-generic.html') as fin:
-                resp = fin.read()
-            self.smart_write(resp)
-            self.finish()
-            return
-
-        with open(path) as fin:
-            resp = fin.read()
-
-        if path in hash_lookup:
-            h = hash_lookup[path]
-        else:
-            h = sha_hash(resp)
-            hash_lookup[path] = h
-
-        if 'If-None-Match' in self.request.headers:
-            if h == self.request.headers['If-None-Match']:
-                self.set_status(304, "Unchanged")
-                self.set_header("Cache-Control", "no-cache, max-age=604800")
-                self.set_header("ETag", h)
-                self.finish()
-                return
-
-        self.set_status(200, 'OK')
-        self.set_header("Cache-Control", "no-cache, max-age=604800")
-        self.set_header("Content-type", mime(path))
-        self.set_header("ETag", h)
-        self.smart_write(resp)
-        self.finish()
-
-
-class AudioHandler(tornado.web.RequestHandler):
-    def get(self):
-        link = self.get_argument('link')
-        path = os.path.join('mp3cache/', sha_hash(link))
-        if not os.path.exists(path):
-            try:
-                downloader.download_audio(link)
-            except Exception:
-                self.set_status(404, 'Not Found')
-                self.set_header('Content-Type', 'text/html')
-                with open('web/404-video.html') as fin:
-                    self.smart_write(fin.read())
-                self.finish()
-                return
-
-        self.set_status(200, 'OK')
-        self.set_header('Content-Type', 'application/octet-stream')
-        with open(path, 'rb') as fin:
-            self.smart_write(fin.read())
-        self.finish()
-
-
-class VideoHandler(tornado.web.RequestHandler):
-    def get(self):
-        link = self.get_argument('link')
-        path = os.path.join('mp4cache/', sha_hash(link))
-        if not os.path.exists(path):
-            try:
-                downloader.download_video(link)
-            except Exception:
-                self.set_status(404, 'Not Found')
-                self.set_header('Content-Type', 'text/html')
-                with open('web/404-video.html') as fin:
-                    self.smart_write(fin.read())
-                self.finish()
-                return
-
-        self.set_status(200, 'OK')
-        self.set_header('Content-Type', 'application/octet-stream')
-        with open(path, 'rb') as fin:
-            self.smart_write(fin.read())
-        self.finish()
-
-
-def make_app():
-    return tornado.web.Application([
-        (r"^/download\.mp3.*$", AudioHandler),
-        (r"^/download\.mp4.*$", VideoHandler),
-        (r"/.*", MainHandler),
-    ])
-
-
-MainHandler.smart_write = smart_reply
-MainHandler.has_gzip = has_gzip
-AudioHandler.smart_write = smart_reply
-AudioHandler.has_gzip = has_gzip
-VideoHandler.smart_write = smart_reply
-VideoHandler.has_gzip = has_gzip
-
-app = make_app()
-app.listen(os.environ['PORT'])
-tornado.ioloop.IOLoop.current().start()
+if __name__ == '__main__':
+    app.run(debug=True)
