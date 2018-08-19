@@ -171,6 +171,8 @@ AudioHandler.has_gzip = has_gzip
 VideoHandler.smart_write = smart_reply
 VideoHandler.has_gzip = has_gzip
 
+print("Server listening on {}".format(os.environ['PORT']))
+
 app = make_app()
 app.listen(os.environ['PORT'])
 tornado.ioloop.IOLoop.current().start()

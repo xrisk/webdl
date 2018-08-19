@@ -9,14 +9,16 @@ def sha_hash(content):
     m.update(content)
     return m.hexdigest()
 
+
 def download_audio(url):
     from subprocess import call
-
+    os.makedirs('./mp3cache', exist_ok=True)
     retcode = call(["youtube-dl", "-x", "--id",
-                    "--audio-quality", "9",
+                    "--audio-quality", "0",
                     "--audio-format", "mp3",
                     "--exec",
-                    "mv {} " + os.path.join('mp3cache/', sha_hash(url)),
+                    "mv './{}' " +
+                    "'{}'".format(os.path.join('mp3cache/', sha_hash(url))),
                     url])
 
     if retcode == 0:
@@ -27,9 +29,11 @@ def download_audio(url):
 
 def download_video(url):
     from subprocess import call
+    os.makedirs('./mp3cache', exist_ok=True)
     retcode = call(["youtube-dl", "--format", "mp4",
                     "--exec",
-                    "mv {} " + os.path.join('mp4cache/', sha_hash(url)),
+                    "mv \"{}\" " +
+                    "\"{}\"".format(os.path.join('mp4cache/', sha_hash(url))),
                     url])
 
     if retcode == 0:
