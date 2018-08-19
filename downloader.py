@@ -29,11 +29,11 @@ def download_audio(url):
 
 def download_video(url):
     from subprocess import call
-    os.makedirs('./mp3cache', exist_ok=True)
+    os.makedirs('./mp4cache', exist_ok=True)
     retcode = call(["youtube-dl", "--format", "mp4",
                     "--exec",
-                    "mv \"{}\" " +
-                    "\"{}\"".format(os.path.join('mp4cache/', sha_hash(url))),
+                    "mv './{}' " +
+                    "'{}'".format(os.path.join('mp4cache/', sha_hash(url))),
                     url])
 
     if retcode == 0:
